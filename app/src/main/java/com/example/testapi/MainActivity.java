@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.testapi.util.FragmentUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,30 +28,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        onItemClickListener = new OnItemClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Toast.makeText(getApplicationContext(), "Item Clicked", Toast.LENGTH_LONG).show();
-            }
-        };
-
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
-
-        layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        dataAdapter = new DataAdapter(getDataSetMatches(),getApplicationContext(),onItemClickListener);
-        recyclerView.setAdapter(dataAdapter);
-
-
+        MainFragment mainFragment = new MainFragment();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                .replace(R.id.content, mainFragment)
+                .addToBackStack(null).commit();
 
     }
 
-    private ArrayList<Request> resultsRequest = new ArrayList<Request>();
-    private List<Request> getDataSetMatches() {
-        return resultsRequest;
-    }
+
 }
 

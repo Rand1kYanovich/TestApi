@@ -29,7 +29,7 @@ public class Request {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(Integer date) {
         this.date = date;
     }
 
