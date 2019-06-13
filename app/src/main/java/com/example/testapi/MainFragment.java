@@ -15,11 +15,15 @@ import com.example.testapi.api.Get;
 import com.example.testapi.api.NetworkService;
 import com.example.testapi.util.FragmentUtil;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,21 +45,7 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        NetworkService.getInstance()
-                .getJSONApi()
-                .getList()
-                .enqueue(new Callback<Get>() {
-                    @Override
-                    public void onResponse(Call<Get> call, Response<Get> response) {
-                        Get get = response.body();
-                        Log.e("List",get+"");
-                    }
 
-                    @Override
-                    public void onFailure(Call<Get> call, Throwable t) {
-
-                    }
-                });
 
 
         onItemClickListener = new OnItemClickListener() {
@@ -78,10 +68,12 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
-    private ArrayList<Request> resultsRequest = new ArrayList<Request>();
-    private List<Request> getDataSetRequest() {
+    private ArrayList<Get.Item> resultsRequest = new ArrayList<Get.Item>();
+    private List<Get.Item> getDataSetRequest() {
         return resultsRequest;
     }
+
+
 
 
 

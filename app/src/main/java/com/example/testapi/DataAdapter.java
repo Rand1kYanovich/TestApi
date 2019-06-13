@@ -2,28 +2,53 @@ package com.example.testapi;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.testapi.api.Get;
+import com.example.testapi.api.NetworkService;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
-    private List<Request> requestList;
+    private List<Get.Item> requestList;
     private Context context;
     private OnItemClickListener clickListener;
 
 
-    public DataAdapter(List<Request> matchesList, Context context,OnItemClickListener onItemClickListener){
+    public DataAdapter(final List<Get.Item> matchesList, Context context, OnItemClickListener onItemClickListener){
         this.requestList = matchesList;
         this.context = context;
         this.clickListener = onItemClickListener;
 
-        requestList.add(new Request("Hi girls",123,"Volgograd","All Right baby"));
-        requestList.add(new Request("Hi girls",321,"Volgograd","All "));
-        requestList.add(new Request("Hi girls",222,"gograd","All Right baby"));
+        NetworkService.getInstance()
+                .getJSONApi()
+                .getList()
+                .enqueue(new Callback<Get>() {
+                    @Override
+                    public void onResponse(Call<Get> call, Response<Get> response) {
+                        if(response.isSuccessful()) {
+                            requestList = new ArrayList<Get.Item>(response.body().getData());
+                            notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Get> call, Throwable t) {
+
+                    }
+                });
     }
 
     @Override
@@ -39,13 +64,17 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
 
     @Override
     public void onBindViewHolder(final DataViewHolders holder, int position) {
-        final Request request = requestList.get(position);
+        final Get.Item request = requestList.get(position);
         holder.title.setText(request.getTitle());
 
-        holder.date.setText(request.getDate()+"");
+        holder.actual_time.setText(request.getActualTime()+"");
         holder.location.setText(request.getLocation());
         holder.status.setText(request.getStatus());
         holder.bind(position,clickListener);
+        Log.e("List",requestList.toString());
+        Toast.makeText(context,"Fuck",Toast.LENGTH_SHORT).show();
+
+
 
 
     }
@@ -60,7 +89,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
 }
 
 class DataViewHolders extends RecyclerView.ViewHolder  {
-    public TextView title,date,location,status;
+    public TextView title,actual_time,location,status;
 
 
 
@@ -69,7 +98,7 @@ class DataViewHolders extends RecyclerView.ViewHolder  {
     public DataViewHolders(View itemView) {
         super(itemView);
         title = itemView.findViewById(R.id.title);
-        date = itemView.findViewById(R.id.date);
+        actual_time = itemView.findViewById(R.id.actual_time);
         location = itemView.findViewById(R.id.location);
         status = itemView.findViewById(R.id.status);
 
