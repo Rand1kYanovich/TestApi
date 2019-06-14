@@ -17,12 +17,7 @@ import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private DataAdapter dataAdapter;
-    private LinearLayoutManager layoutManager;
 
-
-    private OnItemClickListener onItemClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

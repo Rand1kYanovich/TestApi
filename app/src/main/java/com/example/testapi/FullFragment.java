@@ -1,5 +1,6 @@
 package com.example.testapi;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -24,10 +25,12 @@ import retrofit2.Response;
 public class FullFragment extends Fragment {
     private TextView title,actual_time,location,status,description,specialist;
     private String id;
+    private Context context;
 
 
-    public  FullFragment(String id) {
+    public  FullFragment(String id,Context context) {
         this.id = id;
+        this.context = context;
 
     }
 
@@ -69,8 +72,11 @@ public class FullFragment extends Fragment {
                         status.setText(listInfo.getStatus());
                         description.setText(listInfo.getDescription());
                         SecondGet.SecondItem.Specialist specialistInfo = listInfo.getSpecialist();
-                        Log.e("List",specialistInfo+"Ш");
-                        if (false) {
+
+                        if(specialistInfo == null){
+                            Toast.makeText(context,"ФАмилия и Имя не указаны",Toast.LENGTH_SHORT).show();
+                        }
+                        else {
                             specialist.setText(specialistInfo.getFirst_name() + " " + specialistInfo.getLast_name());
                         }
                     }
