@@ -70,9 +70,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
         holder.actual_time.setText(request.getActualTime()+"");
         holder.location.setText(request.getLocation());
         holder.status.setText(request.getStatus());
-        holder.bind(position,clickListener);
-        Log.e("List",requestList.toString());
-        Toast.makeText(context,"Fuck",Toast.LENGTH_SHORT).show();
+        holder.bind(position,clickListener,request.getId());
 
 
 
@@ -107,11 +105,11 @@ class DataViewHolders extends RecyclerView.ViewHolder  {
         //mContext = context;
     }
 
-    public void bind(final int position, final OnItemClickListener listener) {
+    public void bind(final int position, final OnItemClickListener listener,final int id) {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClick(v,position);
+                listener.onClick(v,position,id);
             }
         });
     }

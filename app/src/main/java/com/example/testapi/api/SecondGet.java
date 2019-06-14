@@ -3,18 +3,17 @@ package com.example.testapi.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
-public class Get {
 
+public class SecondGet {
     @SerializedName("status")
     @Expose
     private boolean status;
 
     @SerializedName("data")
     @Expose
-    private List<Item> data;
+    private SecondItem data;
 
 
 
@@ -27,16 +26,15 @@ public class Get {
     }
 
 
-    public List<Get.Item> getData() {
+    public SecondItem getData() {
         return data;
     }
 
-    public void setData(List<Get.Item> data) {
+    public void setData(SecondItem data) {
         this.data = data;
     }
 
-
-    public class Item {
+    public class SecondItem {
 
         @SerializedName("id")
         @Expose
@@ -57,6 +55,14 @@ public class Get {
         @SerializedName("location")
         @Expose
         private String location;
+
+        @SerializedName("description")
+        @Expose
+        private String description;
+
+        @SerializedName("specialist")
+        @Expose
+        private Specialist specialist;
 
 
         public int getId() {
@@ -97,6 +103,50 @@ public class Get {
 
         public void setLocation(String location) {
             this.location = location;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Specialist getSpecialist() {
+            return specialist;
+        }
+
+        public void setSpecialist(Specialist specialist) {
+            this.specialist = specialist;
+        }
+
+
+        public class Specialist {
+
+            @SerializedName("first_name")
+            @Expose
+            private String first_name;
+
+            @SerializedName("last_name")
+            @Expose
+            private String last_name;
+
+            public String getFirst_name() {
+                return first_name;
+            }
+
+            public void setFirst_name(String first_name) {
+                this.first_name = first_name;
+            }
+
+            public String getLast_name() {
+                return last_name;
+            }
+
+            public void setLast_name(String last_name) {
+                this.last_name = last_name;
+            }
         }
 
 

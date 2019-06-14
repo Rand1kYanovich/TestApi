@@ -50,8 +50,8 @@ public class MainFragment extends Fragment {
 
         onItemClickListener = new OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                FullFragment fullFragment = new FullFragment("142");
+            public void onClick(View view, int position,int id) {
+                FullFragment fullFragment = new FullFragment(id+"");
                 FragmentUtil.replace(getContext(),R.id.content,fullFragment);
             }
         };
