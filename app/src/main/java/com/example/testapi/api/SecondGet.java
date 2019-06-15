@@ -15,6 +15,10 @@ public class SecondGet {
     @Expose
     private SecondItem data;
 
+    @SerializedName("error")
+    @Expose
+    private String error;
+
 
 
     public boolean getStatus() {
@@ -33,6 +37,15 @@ public class SecondGet {
     public void setData(SecondItem data) {
         this.data = data;
     }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
 
     public class SecondItem {
 

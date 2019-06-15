@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import retrofit2.Response;
 
 public class FullFragment extends Fragment {
     private TextView title,actual_time,location,status,description,specialist;
+    private Button button_get_down;
     private String id;
     private Context context;
 
@@ -48,7 +50,7 @@ public class FullFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_full,container,false);
+        final View rootView = inflater.inflate(R.layout.fragment_full,container,false);
 
         title = rootView.findViewById(R.id.title);
         actual_time = rootView.findViewById(R.id.actual_time);
@@ -64,20 +66,38 @@ public class FullFragment extends Fragment {
                     @Override
                     public void onResponse(Call<SecondGet> call, Response<SecondGet> response) {
                         SecondGet.SecondItem listInfo = response.body().getData();
-                        Log.e("List", listInfo.getTitle() + "");
+                        if(!response.body().getStatus()){
+                            Log.e("List",response.body().getError());
+                            Toast.makeText(context,response.body().getError(),Toast.LENGTH_SHORT).show();
 
-                        title.setText(listInfo.getTitle());
-                        actual_time.setText(listInfo.getActualTime() + "");
-                        location.setText(listInfo.getLocation());
-                        status.setText(listInfo.getStatus());
-                        description.setText(listInfo.getDescription());
-                        SecondGet.SecondItem.Specialist specialistInfo = listInfo.getSpecialist();
-
-                        if(specialistInfo == null){
-                            Toast.makeText(context,"ФАмилия и Имя не указаны",Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            specialist.setText(specialistInfo.getFirst_name() + " " + specialistInfo.getLast_name());
+
+                            title.setText(listInfo.getTitle());
+                            actual_time.setText(listInfo.getActualTime() + "");
+                            location.setText(listInfo.getLocation());
+                            status.setText(listInfo.getStatus());
+                            description.setText(listInfo.getDescription());
+                            SecondGet.SecondItem.Specialist specialistInfo = listInfo.getSpecialist();
+
+                            if (specialistInfo == null) {
+                                Toast.makeText(context, "Фамилия и Имя не указаны", Toast.LENGTH_SHORT).show();
+                            } else {
+                                specialist.setText(specialistInfo.getFirst_name() + " " + specialistInfo.getLast_name());
+                            }
+
+                            if(listInfo.getStatus().equals("open")){
+                                button_get_down = rootView.findViewById(R.id.button_get_down);
+                                button_get_down.setVisibility(View.VISIBLE);
+                                button_get_down.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Toast.makeText(context,"Извините, данный функционал еще в разработке",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+
                         }
                     }
 
