@@ -14,6 +14,7 @@ import com.example.testapi.api.NetworkService;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,6 +41,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
                     public void onResponse(Call<Get> call, Response<Get> response) {
                         if(response.isSuccessful()) {
                             requestList = new ArrayList<Get.Item>(response.body().getData());
+                            Collections.sort(requestList, new Comparator<Get.Item>() {
+                                @Override
+                                public int compare(Get.Item o1, Get.Item o2) {
+                                    return  (o1.getActualTime()+"").compareTo(o2.getActualTime()+"");
+                                }
+                            });
                             notifyDataSetChanged();
                         }
                     }
@@ -58,6 +65,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
         DataViewHolders rcv = new DataViewHolders(layoutView);
+
 
         return rcv;
     }
@@ -113,4 +121,6 @@ class DataViewHolders extends RecyclerView.ViewHolder  {
             }
         });
     }
+
+
 }
