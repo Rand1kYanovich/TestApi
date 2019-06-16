@@ -1,22 +1,11 @@
 package com.example.testapi;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.testapi.util.FragmentUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.security.AccessController.getContext;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity {
-
 
 
     @Override
@@ -29,8 +18,13 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.content, mainFragment)
                 .addToBackStack(null).commit();
 
+
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
 }
 
