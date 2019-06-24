@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
-
+import com.example.testapi.util.SharedUtil;
 
 
 public class App extends Application {
@@ -15,6 +15,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
+        SharedUtil.init();
 
 
     }

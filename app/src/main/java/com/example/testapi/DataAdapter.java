@@ -1,16 +1,20 @@
 package com.example.testapi;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.testapi.api.Get;
 import com.example.testapi.api.NetworkService;
+import com.example.testapi.util.SharedUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,12 +30,17 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
     private List<Get.Item> requestList;
     private Context context;
     private OnItemClickListener clickListener;
+    private List<Get.Item> filterList;
+
+
 
 
     public DataAdapter(final List<Get.Item> matchesList, Context context, OnItemClickListener onItemClickListener){
         this.requestList = matchesList;
         this.context = context;
         this.clickListener = onItemClickListener;
+        this.filterList = matchesList;
+
 
         NetworkService.getInstance()
                 .getJSONApi()
@@ -47,6 +56,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
                                     return  (o1.getActualTime()+"").compareTo(o2.getActualTime()+"");
                                 }
                             });
+                            setData();
                             notifyDataSetChanged();
                         }
                     }
@@ -56,40 +66,63 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
 
                     }
                 });
+        Log.e("Filter",SharedUtil.getFilter());
+
+
+
+
     }
+
+
 
     @Override
     public DataViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
         DataViewHolders rcv = new DataViewHolders(layoutView);
-
-
         return rcv;
     }
 
+
+
     @Override
     public void onBindViewHolder(final DataViewHolders holder, int position) {
-        final Get.Item request = requestList.get(position);
+        Get.Item request = filterList.get(position);
         holder.title.setText(request.getTitle());
-
         holder.actual_time.setText(request.getActualTime()+"");
         holder.location.setText(request.getLocation());
         holder.status.setText(request.getStatus());
         holder.bind(position,clickListener,request.getId());
+    }
 
 
 
-
+    public void setData(){
+        String filter = SharedUtil.getFilter();
+        filterList.clear();
+        if(filter.equals("all")){
+            filterList = new ArrayList<Get.Item>(requestList);
+        }
+        else {
+            for (int i = 0; i < requestList.size(); i++) {
+                Get.Item object = requestList.get(i);
+                if (object.getStatus().equals(filter)) {
+                    filterList.add(object);
+                    Toast.makeText(context, "Hi", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
 
     @Override
     public int getItemCount() {
-        return this.requestList.size();
+        return this.filterList.size();
     }
+
+
 
 
 }
@@ -121,6 +154,8 @@ class DataViewHolders extends RecyclerView.ViewHolder  {
             }
         });
     }
+
+
 
 
 }
