@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -56,6 +57,15 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
                                     return  (o1.getActualTime()+"").compareTo(o2.getActualTime()+"");
                                 }
                             });
+                            for (int i = 0;i<requestList.size();i++){
+                                if(requestList.get(i).getStatus().equals("open")) {
+                                    requestList.get(i).setStatus("Открытые");
+                                }else if (requestList.get(i).getStatus().equals("closed")){
+                                    requestList.get(i).setStatus("Закрытые");
+                                }else if (requestList.get(i).getStatus().equals("in_progress")){
+                                    requestList.get(i).setStatus("В процессе");
+                                }
+                            }
                             setData();
                             notifyDataSetChanged();
                         }
@@ -88,6 +98,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
 
     @Override
     public void onBindViewHolder(final DataViewHolders holder, int position) {
+
+
+
         Get.Item request = filterList.get(position);
         holder.title.setText(request.getTitle());
         holder.actual_time.setText(request.getActualTime()+"");
@@ -101,15 +114,16 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
     public void setData(){
         String filter = SharedUtil.getFilter();
         filterList.clear();
-        if(filter.equals("all")){
+        if(filter.equals("Все")){
             filterList = new ArrayList<Get.Item>(requestList);
         }
         else {
             for (int i = 0; i < requestList.size(); i++) {
                 Get.Item object = requestList.get(i);
                 if (object.getStatus().equals(filter)) {
+                    Log.e("Equals",object.getStatus());
                     filterList.add(object);
-                    Toast.makeText(context, "Hi", Toast.LENGTH_SHORT).show();
+
                 }
             }
         }

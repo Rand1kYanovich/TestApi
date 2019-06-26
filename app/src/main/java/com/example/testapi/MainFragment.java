@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -39,8 +41,8 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private DataAdapter dataAdapter;
     private LinearLayoutManager layoutManager;
-    private String selectedItem;
-    private SharedPreferences sharedPreferences;
+    private Spinner spinner;
+
 
 
     private OnItemClickListener onItemClickListener;
@@ -63,7 +65,7 @@ public class MainFragment extends Fragment {
                 FragmentUtil.replace(getContext(),R.id.content,fullFragment);
             }
         };
-
+        spinner = (Spinner)rootView.findViewById(R.id.spinner);
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
@@ -73,6 +75,27 @@ public class MainFragment extends Fragment {
 
         dataAdapter = new DataAdapter(getDataSetRequest(),getContext(),onItemClickListener);
         recyclerView.setAdapter(dataAdapter);
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String[] choose = getResources().getStringArray(R.array.filterlist);
+                        Toast.makeText(getContext(), choose[position], Toast.LENGTH_SHORT).show();
+                        SharedUtil.setFilter(choose[position]);
+                        dataAdapter.setData();
+
+                }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
         return rootView;
     }
 
@@ -83,26 +106,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.all:
-                SharedUtil.setFilter("all");
-                dataAdapter.setData();
-                return true;
-            case R.id.open:
-                SharedUtil.setFilter("open");
-                dataAdapter.setData();
-                return true;
-            case R.id.closed:
-                SharedUtil.setFilter("closed");
-                dataAdapter.setData();
-                return true;
-            case R.id.in_progress:
-                SharedUtil.setFilter("in_progress");
-                dataAdapter.setData();
-                return true;
 
-        }
         return true;
 
     }
