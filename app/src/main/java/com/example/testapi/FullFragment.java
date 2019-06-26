@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.testapi.api.Get;
 import com.example.testapi.api.NetworkService;
 import com.example.testapi.api.SecondGet;
+import com.example.testapi.util.FragmentUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +33,7 @@ public class FullFragment extends Fragment {
     private Button button_get_down;
     private String id;
     private Context context;
+
 
 
     public  FullFragment(String id,Context context) {
@@ -54,12 +58,17 @@ public class FullFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_full,container,false);
 
+
+
+
+
         title = rootView.findViewById(R.id.title);
         actual_time = rootView.findViewById(R.id.actual_time);
         location = rootView.findViewById(R.id.location);
         status = rootView.findViewById(R.id.status);
         description = rootView.findViewById(R.id.description);
         specialist = rootView.findViewById(R.id.specialist);
+
 
         NetworkService.getInstance()
                 .getJSONApi()
@@ -76,7 +85,10 @@ public class FullFragment extends Fragment {
                         else {
 
                             title.setText(listInfo.getTitle());
-                            actual_time.setText(listInfo.getActualTime() + "");
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+                            String time = simpleDateFormat.format(listInfo.getActualTime());
+                            actual_time.setText(time);
+                            Log.e("Time",time);
                             location.setText(listInfo.getLocation());
                             if(listInfo.getStatus().equals("open"))
                             status.setText("Открытая");

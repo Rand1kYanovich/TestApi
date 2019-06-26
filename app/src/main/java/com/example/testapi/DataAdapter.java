@@ -17,6 +17,7 @@ import com.example.testapi.api.Get;
 import com.example.testapi.api.NetworkService;
 import com.example.testapi.util.SharedUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -65,6 +66,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
                                 }else if (requestList.get(i).getStatus().equals("in_progress")){
                                     requestList.get(i).setStatus("В процессе");
                                 }
+
                             }
                             setData();
                             notifyDataSetChanged();
@@ -98,12 +100,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
 
     @Override
     public void onBindViewHolder(final DataViewHolders holder, int position) {
-
-
-
         Get.Item request = filterList.get(position);
         holder.title.setText(request.getTitle());
-        holder.actual_time.setText(request.getActualTime()+"");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+        String time = simpleDateFormat.format(request.getActualTime());
+        holder.actual_time.setText(time);
         holder.location.setText(request.getLocation());
         holder.status.setText(request.getStatus());
         holder.bind(position,clickListener,request.getId());
