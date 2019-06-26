@@ -1,13 +1,10 @@
 package com.example.testapi;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,26 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.testapi.api.Get;
-import com.example.testapi.api.NetworkService;
 import com.example.testapi.util.FragmentUtil;
 import com.example.testapi.util.SharedUtil;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -81,7 +65,6 @@ public class MainFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         String[] choose = getResources().getStringArray(R.array.filterlist);
-                        Toast.makeText(getContext(), choose[position], Toast.LENGTH_SHORT).show();
                         SharedUtil.setFilter(choose[position]);
                         dataAdapter.setData();
 

@@ -1,6 +1,8 @@
 package com.example.testapi;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -76,7 +78,12 @@ public class FullFragment extends Fragment {
                             title.setText(listInfo.getTitle());
                             actual_time.setText(listInfo.getActualTime() + "");
                             location.setText(listInfo.getLocation());
-                            status.setText(listInfo.getStatus());
+                            if(listInfo.getStatus().equals("open"))
+                            status.setText("Открытая");
+                            else if(listInfo.getStatus().equals("closed"))
+                                status.setText("Закрытая");
+                            else if(listInfo.getStatus().equals("in_progress"))
+                                status.setText("В процессе");
                             description.setText(listInfo.getDescription());
                             SecondGet.SecondItem.Specialist specialistInfo = listInfo.getSpecialist();
 
@@ -92,9 +99,21 @@ public class FullFragment extends Fragment {
                                 button_get_down.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Toast.makeText(context,"Извините, данный функционал еще в разработке",Toast.LENGTH_SHORT).show();
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                        builder.setTitle("ОШИБКА!!!")
+                                                .setMessage("Извините, данный функционал еще в разработке")
+                                                .setNegativeButton("Ок,приду потом",
+                                                        new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            dialog.cancel();
+                                                        }
+                                                    });
+                                        AlertDialog alert = builder.create();
+                                        alert.show();
                                     }
                                 });
+
 
                             }
 
