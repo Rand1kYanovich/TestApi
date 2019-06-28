@@ -3,6 +3,7 @@ package com.example.testapi;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,7 +29,6 @@ public class MainFragment extends Fragment {
     private Spinner spinner;
 
 
-
     private OnItemClickListener onItemClickListener;
     public MainFragment() {
 
@@ -39,7 +39,6 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
         setHasOptionsMenu(true);
 
         onItemClickListener = new OnItemClickListener() {
