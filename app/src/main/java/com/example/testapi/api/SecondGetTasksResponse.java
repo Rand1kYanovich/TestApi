@@ -6,17 +6,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 
-public class SecondGet {
-    @SerializedName("status")
-    @Expose
+public class SecondGetTasksResponse {
+
     private boolean status;
-
-    @SerializedName("data")
-    @Expose
     private SecondItem data;
-
-    @SerializedName("error")
-    @Expose
     private String error;
 
 
@@ -49,32 +42,12 @@ public class SecondGet {
 
     public class SecondItem {
 
-        @SerializedName("id")
-        @Expose
         private int id;
-
-        @SerializedName("title")
-        @Expose
         private String title;
-
-        @SerializedName("actual_time")
-        @Expose
         private int actual_time;
-
-        @SerializedName("status")
-        @Expose
         private String status;
-
-        @SerializedName("location")
-        @Expose
         private String location;
-
-        @SerializedName("description")
-        @Expose
         private String description;
-
-        @SerializedName("specialist")
-        @Expose
         private Specialist specialist;
 
 

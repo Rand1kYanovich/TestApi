@@ -3,17 +3,11 @@ package com.example.testapi.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
-public class Get {
+public class GetTasksResponse {
 
-    @SerializedName("status")
-    @Expose
     private boolean status;
-
-    @SerializedName("data")
-    @Expose
     private List<Item> data;
 
 
@@ -27,35 +21,21 @@ public class Get {
     }
 
 
-    public List<Get.Item> getData() {
+    public List<GetTasksResponse.Item> getData() {
         return data;
     }
 
-    public void setData(List<Get.Item> data) {
+    public void setData(List<GetTasksResponse.Item> data) {
         this.data = data;
     }
 
 
     public class Item {
 
-        @SerializedName("id")
-        @Expose
         private int id;
-
-        @SerializedName("title")
-        @Expose
         private String title;
-
-        @SerializedName("actual_time")
-        @Expose
         private int actual_time;
-
-        @SerializedName("status")
-        @Expose
         private String status;
-
-        @SerializedName("location")
-        @Expose
         private String location;
 
 

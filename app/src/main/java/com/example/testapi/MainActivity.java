@@ -26,16 +26,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        MainFragmentReplace();
+        onBackPressed();
         return true;
     }
+
 
     private void MainFragmentReplace(){
         MainFragment mainFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .replace(R.id.content, mainFragment)
-                .addToBackStack(null).commit();
+                .commit();
     }
+
 }
 

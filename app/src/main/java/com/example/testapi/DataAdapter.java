@@ -1,19 +1,14 @@
 package com.example.testapi;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.example.testapi.api.Get;
+import com.example.testapi.api.GetTasksResponse;
 import com.example.testapi.api.NetworkService;
 import com.example.testapi.util.SharedUtil;
 
@@ -29,56 +24,19 @@ import retrofit2.Response;
 
 
 public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
-    private List<Get.Item> requestList;
+    private List<GetTasksResponse.Item> requestList;
     private Context context;
     private OnItemClickListener clickListener;
-    private List<Get.Item> filterList;
+    private List<GetTasksResponse.Item> filterList;
 
 
 
 
-    public DataAdapter(final List<Get.Item> matchesList, Context context, OnItemClickListener onItemClickListener){
-        this.requestList = matchesList;
+    public DataAdapter( Context context, OnItemClickListener onItemClickListener){
         this.context = context;
         this.clickListener = onItemClickListener;
-        this.filterList = matchesList;
-
-
-        NetworkService.getInstance()
-                .getJSONApi()
-                .getList()
-                .enqueue(new Callback<Get>() {
-                    @Override
-                    public void onResponse(Call<Get> call, Response<Get> response) {
-                        if(response.isSuccessful()) {
-                            requestList = new ArrayList<Get.Item>(response.body().getData());
-                            Collections.sort(requestList, new Comparator<Get.Item>() {
-                                @Override
-                                public int compare(Get.Item o1, Get.Item o2) {
-                                    return  (o1.getActualTime()+"").compareTo(o2.getActualTime()+"");
-                                }
-                            });
-                            for (int i = 0;i<requestList.size();i++){
-                                if(requestList.get(i).getStatus().equals("open")) {
-                                    requestList.get(i).setStatus("Открытые");
-                                }else if (requestList.get(i).getStatus().equals("closed")){
-                                    requestList.get(i).setStatus("Закрытые");
-                                }else if (requestList.get(i).getStatus().equals("in_progress")){
-                                    requestList.get(i).setStatus("В процессе");
-                                }
-
-                            }
-                            setData();
-                            notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Get> call, Throwable t) {
-
-                    }
-                });
-        Log.e("Filter",SharedUtil.getFilter());
+        this.filterList = new ArrayList<>();
+        this.requestList = new ArrayList<>();
 
 
 
@@ -100,10 +58,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
 
     @Override
     public void onBindViewHolder(final DataViewHolders holder, int position) {
-        Get.Item request = filterList.get(position);
+        GetTasksResponse.Item request = filterList.get(position);
+        Log.e("MM",filterList.get(position)+"");
         holder.title.setText(request.getTitle());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-        String time = simpleDateFormat.format(request.getActualTime());
+        long second = Long.valueOf(request.getActualTime())*1000;
+        String time = simpleDateFormat.format(second);
         holder.actual_time.setText(time);
         holder.location.setText(request.getLocation());
         holder.status.setText(request.getStatus());
@@ -114,16 +74,19 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
 
     public void setData(){
         String filter = SharedUtil.getFilter();
-        filterList.clear();
+        if(filterList!=null)filterList.clear();
+
         if(filter.equals("Все")){
-            filterList = new ArrayList<Get.Item>(requestList);
+            filterList = new ArrayList<GetTasksResponse.Item>(requestList);
+
         }
         else {
             for (int i = 0; i < requestList.size(); i++) {
-                Get.Item object = requestList.get(i);
+                GetTasksResponse.Item object = requestList.get(i);
                 if (object.getStatus().equals(filter)) {
                     Log.e("Equals",object.getStatus());
                     filterList.add(object);
+                    Log.e("Clear2",filterList+"");
 
                 }
             }
@@ -135,9 +98,30 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
     @Override
     public int getItemCount() {
         return this.filterList.size();
+
     }
 
+    public void setRequestList(List<GetTasksResponse.Item> requestList,List<GetTasksResponse.Item> filterList){
+        this.filterList = filterList;
+        this.requestList = requestList;
 
+        Log.e("List",requestList+"");
+        Log.e("List",filterList+"");
+
+        Log.e("Fuck5",requestList+"");
+        for (int i = 0;i<requestList.size();i++){
+            if(requestList.get(i).getStatus().equals("open")) {
+                requestList.get(i).setStatus("Открытые");
+            }else if (requestList.get(i).getStatus().equals("closed")){
+                requestList.get(i).setStatus("Закрытые");
+            }else if (requestList.get(i).getStatus().equals("in_progress")){
+                requestList.get(i).setStatus("В процессе");
+            }
+
+        }
+        Log.e("Fuck6",requestList+"");
+        setData();
+    }
 
 
 }

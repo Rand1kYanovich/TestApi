@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testapi.api.NetworkService;
-import com.example.testapi.api.SecondGet;
-import com.example.testapi.util.FragmentUtil;
+import com.example.testapi.api.SecondGetTasksResponse;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,10 +68,10 @@ public class FullFragment extends Fragment {
         NetworkService.getInstance()
                 .getJSONApi()
                 .getFullList(id)
-                .enqueue(new Callback<SecondGet>() {
+                .enqueue(new Callback<SecondGetTasksResponse>() {
                     @Override
-                    public void onResponse(Call<SecondGet> call, Response<SecondGet> response) {
-                        SecondGet.SecondItem listInfo = response.body().getData();
+                    public void onResponse(Call<SecondGetTasksResponse> call, Response<SecondGetTasksResponse> response) {
+                        SecondGetTasksResponse.SecondItem listInfo = response.body().getData();
                         if(!response.body().getStatus()){
                             Log.e("List",response.body().getError());
                             Toast.makeText(context,response.body().getError(),Toast.LENGTH_SHORT).show();
@@ -86,7 +81,8 @@ public class FullFragment extends Fragment {
 
                             title.setText(listInfo.getTitle());
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-                            String time = simpleDateFormat.format(listInfo.getActualTime());
+                            long second = Long.valueOf(listInfo.getActualTime())*1000;
+                            String time = simpleDateFormat.format(second);
                             actual_time.setText(time);
                             Log.e("Time",time);
                             location.setText(listInfo.getLocation());
@@ -97,7 +93,7 @@ public class FullFragment extends Fragment {
                             else if(listInfo.getStatus().equals("in_progress"))
                                 status.setText("В процессе");
                             description.setText(listInfo.getDescription());
-                            SecondGet.SecondItem.Specialist specialistInfo = listInfo.getSpecialist();
+                            SecondGetTasksResponse.SecondItem.Specialist specialistInfo = listInfo.getSpecialist();
 
                             if (specialistInfo == null) {
                                 Toast.makeText(context, "Фамилия и Имя не указаны", Toast.LENGTH_SHORT).show();
@@ -133,7 +129,7 @@ public class FullFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<SecondGet> call, Throwable t) {
+                    public void onFailure(Call<SecondGetTasksResponse> call, Throwable t) {
 
                     }
                 });
