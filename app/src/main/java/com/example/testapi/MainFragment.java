@@ -2,6 +2,8 @@ package com.example.testapi;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -119,14 +121,19 @@ public class MainFragment extends Fragment {
 
 
 
-
+        for(int i=0;i<choose.length;i++){
+            if(SharedUtil.getFilter().equals(choose[i])){
+                spinner.setSelection(i);
+            }
+        }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(dataAdapter!=null) {
-                    String[] choose = getResources().getStringArray(R.array.filterlist);
-                    SharedUtil.setFilter(choose[position]);
-                    dataAdapter.setData();
+                        String[] choose = getResources().getStringArray(R.array.filterlist);
+                        SharedUtil.setFilter(choose[position]);
+                        dataAdapter.setData();
+
                 }
 
                 }
@@ -141,6 +148,11 @@ public class MainFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

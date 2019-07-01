@@ -133,7 +133,7 @@ class DataViewHolders extends RecyclerView.ViewHolder  {
         status = itemView.findViewById(R.id.status);
 
 
-        
+
     }
 
     public void bind(final int position, final OnItemClickListener listener,final int id) {
