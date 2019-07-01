@@ -16,7 +16,7 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="2px"
+        android:layout_height="1dp"
         android:background="#b0b0b0"
         app:layout_constraintBottom_toBottomOf="@+id/spinner"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -24,7 +24,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="570dp"
+        android:layout_height="wrap_content"
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@+id/spinner"
          />

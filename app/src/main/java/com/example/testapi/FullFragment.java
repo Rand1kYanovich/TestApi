@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,10 +26,12 @@ import retrofit2.Response;
 
 
 public class FullFragment extends Fragment {
-    private TextView title,actual_time,location,status,description,specialist;
-    private Button button_get_down;
+    private TextView tvTitle,tvActualTime,tvLocation,tvStatus,tvDescription,tvSpecialist;
+    private Button btnGetDown;
     private String id;
     private Context context;
+    private String[] choose;
+    private String[] chooseServer;
 
 
 
@@ -54,16 +58,22 @@ public class FullFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_full,container,false);
 
 
+        choose = getResources().getStringArray(R.array.filterlist);
+        chooseServer = getResources().getStringArray(R.array.filterlist_server);
 
 
+        tvTitle = rootView.findViewById(R.id.tvTitle);
+        tvActualTime = rootView.findViewById(R.id.tvActualTime);
+        tvLocation = rootView.findViewById(R.id.tvLocation);
+        tvStatus = rootView.findViewById(R.id.tvStatus);
+        tvDescription = rootView.findViewById(R.id.tvDescription);
+        tvSpecialist = rootView.findViewById(R.id.tvSpecialist);
 
-        title = rootView.findViewById(R.id.title);
-        actual_time = rootView.findViewById(R.id.actual_time);
-        location = rootView.findViewById(R.id.location);
-        status = rootView.findViewById(R.id.status);
-        description = rootView.findViewById(R.id.description);
-        specialist = rootView.findViewById(R.id.specialist);
+        return rootView;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
 
         NetworkService.getInstance()
                 .getJSONApi()
@@ -73,50 +83,45 @@ public class FullFragment extends Fragment {
                     public void onResponse(Call<SecondGetTasksResponse> call, Response<SecondGetTasksResponse> response) {
                         SecondGetTasksResponse.SecondItem listInfo = response.body().getData();
                         if(!response.body().getStatus()){
-                            Log.e("List",response.body().getError());
                             Toast.makeText(context,response.body().getError(),Toast.LENGTH_SHORT).show();
 
                         }
                         else {
 
-                            title.setText(listInfo.getTitle());
+                            tvTitle.setText(listInfo.getTitle());
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
                             long second = Long.valueOf(listInfo.getActualTime())*1000;
                             String time = simpleDateFormat.format(second);
-                            actual_time.setText(time);
-                            Log.e("Time",time);
-                            location.setText(listInfo.getLocation());
-                            if(listInfo.getStatus().equals("open"))
-                            status.setText("Открытая");
-                            else if(listInfo.getStatus().equals("closed"))
-                                status.setText("Закрытая");
-                            else if(listInfo.getStatus().equals("in_progress"))
-                                status.setText("В процессе");
-                            description.setText(listInfo.getDescription());
+                            tvActualTime.setText(time);
+                            tvLocation.setText(listInfo.getLocation());
+                            for(int i = 0;i<choose.length;i++){
+                                if(listInfo.getStatus().equals(chooseServer[i])) listInfo.setStatus(choose[i]);
+                            }
+                            tvDescription.setText(listInfo.getDescription());
                             SecondGetTasksResponse.SecondItem.Specialist specialistInfo = listInfo.getSpecialist();
 
                             if (specialistInfo == null) {
-                                Toast.makeText(context, "Фамилия и Имя не указаны", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, getText(R.string.error_name), Toast.LENGTH_SHORT).show();
                             } else {
-                                specialist.setText(specialistInfo.getFirst_name() + " " + specialistInfo.getLast_name());
+                                tvSpecialist.setText(specialistInfo.getFirst_name() + " " + specialistInfo.getLast_name());
                             }
 
-                            if(listInfo.getStatus().equals("open")){
-                                button_get_down = rootView.findViewById(R.id.button_get_down);
-                                button_get_down.setVisibility(View.VISIBLE);
-                                button_get_down.setOnClickListener(new View.OnClickListener() {
+                            if(listInfo.getStatus().equals(chooseServer[1])){
+                                btnGetDown = view.findViewById(R.id.btnGetDown);
+                                btnGetDown.setVisibility(View.VISIBLE);
+                                btnGetDown.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                        builder.setTitle("ОШИБКА!!!")
-                                                .setMessage("Извините, данный функционал еще в разработке")
-                                                .setNegativeButton("Ок,приду потом",
+                                        builder.setTitle(getText(R.string.alert_title))
+                                                .setMessage(getText(R.string.alert_message))
+                                                .setNegativeButton(getText(R.string.alert_btn),
                                                         new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            dialog.cancel();
-                                                        }
-                                                    });
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                dialog.cancel();
+                                                            }
+                                                        });
                                         AlertDialog alert = builder.create();
                                         alert.show();
                                     }
@@ -134,9 +139,5 @@ public class FullFragment extends Fragment {
                     }
                 });
 
-
-        return rootView;
     }
-
-
 }

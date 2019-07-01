@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filterlist">
+        <item>Все</item>
+        <item>Открытые</item>
+        <item>В процессе</item>
+        <item>Закрытые</item>
+    </string-array>
+
+    <string-array name="filterlist_server">
+        <item>all</item>
+        <item>open</item>
+        <item>in_progress</item>
+        <item>closed</item>
+    </string-array>
+</resources>

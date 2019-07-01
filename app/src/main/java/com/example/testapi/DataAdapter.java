@@ -28,6 +28,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
     private Context context;
     private OnItemClickListener clickListener;
     private List<GetTasksResponse.Item> filterList;
+    private String[] choose;
+    private String[] chooseServer;
 
 
 
@@ -37,6 +39,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
         this.clickListener = onItemClickListener;
         this.filterList = new ArrayList<>();
         this.requestList = new ArrayList<>();
+        this.choose = ((MainActivity)context).getResources().getStringArray(R.array.filterlist);
+        this.chooseServer = ((MainActivity)context).getResources().getStringArray(R.array.filterlist_server);
 
 
 
@@ -76,7 +80,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
         String filter = SharedUtil.getFilter();
         if(filterList!=null)filterList.clear();
 
-        if(filter.equals("Все")){
+        if(filter.equals(choose[0])){
             filterList = new ArrayList<GetTasksResponse.Item>(requestList);
 
         }
@@ -84,9 +88,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
             for (int i = 0; i < requestList.size(); i++) {
                 GetTasksResponse.Item object = requestList.get(i);
                 if (object.getStatus().equals(filter)) {
-                    Log.e("Equals",object.getStatus());
                     filterList.add(object);
-                    Log.e("Clear2",filterList+"");
 
                 }
             }
@@ -105,21 +107,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
         this.filterList = filterList;
         this.requestList = requestList;
 
-        Log.e("List",requestList+"");
-        Log.e("List",filterList+"");
-
-        Log.e("Fuck5",requestList+"");
         for (int i = 0;i<requestList.size();i++){
-            if(requestList.get(i).getStatus().equals("open")) {
-                requestList.get(i).setStatus("Открытые");
-            }else if (requestList.get(i).getStatus().equals("closed")){
-                requestList.get(i).setStatus("Закрытые");
-            }else if (requestList.get(i).getStatus().equals("in_progress")){
-                requestList.get(i).setStatus("В процессе");
+            for (int j=0;j<choose.length;j++){
+                if(requestList.get(i).getStatus().equals(chooseServer[j])) requestList.get(i).setStatus(choose[j]);
             }
-
         }
-        Log.e("Fuck6",requestList+"");
         setData();
     }
 
@@ -141,8 +133,7 @@ class DataViewHolders extends RecyclerView.ViewHolder  {
         status = itemView.findViewById(R.id.status);
 
 
-
-        //mContext = context;
+        
     }
 
     public void bind(final int position, final OnItemClickListener listener,final int id) {

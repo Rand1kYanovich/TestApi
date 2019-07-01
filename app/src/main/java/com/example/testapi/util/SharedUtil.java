@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.example.testapi.App;
 import com.example.testapi.MainActivity;
+import com.example.testapi.R;
 
 public class SharedUtil {
 

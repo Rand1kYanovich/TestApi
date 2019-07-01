@@ -36,6 +36,8 @@ public class MainFragment extends Fragment {
     private Spinner spinner;
     private List<GetTasksResponse.Item> requestList;
     private List<GetTasksResponse.Item> filterList;
+    private String[] choose;
+    private String[] chooseServer;
 
 
     private OnItemClickListener onItemClickListener;
@@ -51,6 +53,8 @@ public class MainFragment extends Fragment {
         setHasOptionsMenu(true);
         requestList = new ArrayList<>();
         filterList = new ArrayList<>();
+        choose = getResources().getStringArray(R.array.filterlist);
+        chooseServer = getResources().getStringArray(R.array.filterlist_server);
         onItemClickListener = new OnItemClickListener() {
             @Override
             public void onClick(View view, int position,int id) {
@@ -82,15 +86,14 @@ public class MainFragment extends Fragment {
                                     return  (o1.getActualTime()+"").compareTo(o2.getActualTime()+"");
                                 }
                             });
+
                             for (int i = 0;i<requestList.size();i++) {
-                                if (requestList.get(i).getStatus().equals("open")) {
-                                    requestList.get(i).setStatus("Открытые");
-                                } else if (requestList.get(i).getStatus().equals("closed")) {
-                                    requestList.get(i).setStatus("Закрытые");
-                                } else if (requestList.get(i).getStatus().equals("in_progress")) {
-                                    requestList.get(i).setStatus("В процессе");
+                                for(int j =0;j<choose.length;j++){
+                                    if(requestList.get(i).equals(chooseServer[j])) requestList.get(i).setStatus(choose[j]);
                                 }
                             }
+
+
                             dataAdapter = new DataAdapter(getContext(), onItemClickListener);
                             for(int i =0;i<requestList.size();i++){
                                 filterList.add(requestList.get(i));
@@ -109,7 +112,7 @@ public class MainFragment extends Fragment {
 
                     }
                 });
-        Log.e("Filter",SharedUtil.getFilter());
+
 
         recyclerView.setAdapter(dataAdapter);
 

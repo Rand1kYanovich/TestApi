@@ -110,12 +110,9 @@ public class SecondGetTasksResponse {
 
         public class Specialist {
 
-            @SerializedName("first_name")
-            @Expose
+
             private String first_name;
 
-            @SerializedName("last_name")
-            @Expose
             private String last_name;
 
             public String getFirst_name() {
