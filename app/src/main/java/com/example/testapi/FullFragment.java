@@ -105,8 +105,7 @@ public class FullFragment extends Fragment {
                             } else {
                                 tvSpecialist.setText(specialistInfo.getFirst_name() + " " + specialistInfo.getLast_name());
                             }
-
-                            if(listInfo.getStatus().equals(chooseServer[1])){
+                            if(listInfo.getStatus().equals(choose[1])){
                                 btnGetDown = view.findViewById(R.id.btnGetDown);
                                 btnGetDown.setVisibility(View.VISIBLE);
                                 btnGetDown.setOnClickListener(new View.OnClickListener() {

@@ -63,7 +63,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolders>{
     @Override
     public void onBindViewHolder(final DataViewHolders holder, int position) {
         GetTasksResponse.Item request = filterList.get(position);
-        Log.e("MM",filterList.get(position)+"");
         holder.title.setText(request.getTitle());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
         long second = Long.valueOf(request.getActualTime())*1000;

@@ -21,12 +21,10 @@ public class SharedUtil {
     }
 
     public static String getFilter(){
-        Log.e("SPREF",sPref.getString("Filter","Все"));
         return sPref.getString("Filter","Все");
     }
 
     public static void setFilter(String filter){
-        Log.e("SPREF_SET",sPref.getString("Filter","Все"));
         getEditor().putString("Filter",filter).commit();
     }
 
